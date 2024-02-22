@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Counter from "./components/Counter/Counter";
+import GenreSelect from "./components/GenreSelect/GenreSelect";
+import SearchForm from "./components/SearchForm/SearchForm";
+
+function handleSearch() {
+  console.log("Searching...");
+}
+
+function handleSelect(e) {
+  console.log(e.target.value)
+}
+
+const genreList = ["Crime", "Documentary", "Horror", "Comedy"];
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Counter value="1" />
+      <SearchForm initValue="Avengers" onSearch={handleSearch} /><br/>
+      <GenreSelect genreList={genreList} selectedGenre="Comedy" onSelect={handleSelect} />
     </div>
   );
 }
