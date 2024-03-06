@@ -1,6 +1,10 @@
 import React from "react";
 
 class SearchForm extends React.Component {
+  state = {
+    inputValue: "",
+  };
+
   render() {
     return (
       <>
@@ -9,11 +13,20 @@ class SearchForm extends React.Component {
           onFocus={this.props.onSearch}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-                this.props.onSearch();
+              this.props.onSearch(e.target.value);
             }
           }}
+          onChange={(e) => {
+            this.setState({ inputValue: e.target.value });
+          }}
+          data-testid="searchInput"
         />
-        <button onClick={this.props.onSearch}>Search</button>
+        <button
+          onClick={(e) => this.props.onSearch(this.state.inputValue)}
+          data-testid="searchBtn"
+        >
+          Search
+        </button>
       </>
     );
   }
