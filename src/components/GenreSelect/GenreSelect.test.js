@@ -19,8 +19,8 @@ test('Component highlights the selected genre passed in props', () => {
 });
 
 test('After a click event on a genre button component calls "onChange" callback and passes correct genre in arguments', async () => {
-  const selectHandler = jest.fn();
+  const selectHandler = jest.fn(); //this is a mock
   render(<GenreSelect genreList={genreList} selectedGenre="Comedy" onSelect={selectHandler} />);
   await fireEvent.change(screen.getByTestId('genreSelect'), {target: {value: 'Horror'}})
-  expect(selectHandler).toHaveBeenCalledWith('Horror')
+  expect(selectHandler).toHaveBeenCalledWith('Horror') //verify the mock function called with correct args
 });

@@ -7,10 +7,20 @@ export const joinItems = (list) => {
 };
 
 export const findObjectById = async (arr, id) => {
-  await arr.forEach(element => {
-    if(element.id ===  id){
-      console.log('Found', element)
-      return element;
+  const data = await arr.find(x => x.id === id);
+  return data;
+}
+
+export const sortByProperty = (arr, prop) => {
+  return arr.sort((a,b)=> {
+    const propA = a[prop];
+    const propB = b[prop];
+    if(propA < propB){
+      return -1;
     }
+    if(propA > propB){
+      return 1;
+    }
+    return 0;
   });
 }

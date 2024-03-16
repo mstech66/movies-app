@@ -2,16 +2,20 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./MovieTile.module.css";
 import { joinItems } from "../../helpers/Helpers";
-import { Link } from "react-router-dom";
-
-
 
 export default function MovieTile(props) {
-  const { imgUrl, name, releaseYear, genreList } = props;
+  const { imgUrl, name, releaseYear, genreList, id, handleClick } = props;
+
+  if(!name && !genreList && !releaseYear && !imgUrl && ! id){
+    return null;
+  }
+
+  const handleCardClick = async() => {
+    await handleClick(id);
+  }
 
   return (
-    <Link to={"/movie"} state={{data: props}} className={styles.link}>
-    <div className={styles.card}>
+    <div className={styles.card} onClick={handleCardClick} key={id} data-testid={id}>
       <img src={imgUrl} alt={name} />
       <div className={styles.descBlock}>
         <div className={styles.detailsBlock}>
@@ -21,6 +25,14 @@ export default function MovieTile(props) {
         <p className={styles.genre}>{joinItems(genreList)}</p>
       </div>
     </div>
-    </Link>
   );
+}
+
+MovieTile.propTypes = {
+  id: PropTypes.string,
+  name: PropTypes.string,
+  imgUrl: PropTypes.string,
+  genreList: PropTypes.array,
+  releaseYear: PropTypes.number,
+  handleClick: PropTypes.func
 }

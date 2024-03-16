@@ -2,11 +2,12 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    color: white;
+    color: #FFFFFF;
 }
 
 .card{
     flex: 0 1 300px;
+    min-width: 300px;
     position: relative;
     width: 300px;
     height: 440px;
@@ -36,10 +37,25 @@
     gap: 20px;
 }
 
+.inlineBlock:nth-child(3){
+    color: #F65261;
+}
+
 .detailsBlock{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    align-items: flex-start;
     flex-wrap: wrap;
-    max-width: 500px;
+    max-width: 730px;
+    text-align: start;
+}
+
+.descr{
+    color: #919191;
+}
+
+.genreList{
+    margin: 0;
+    color: #919191;
 }
