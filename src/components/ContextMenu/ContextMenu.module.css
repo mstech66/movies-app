@@ -1,0 +1,49 @@
+.contextButton {
+  position: relative;
+  padding: 10px;
+  font-size: 25px;
+  color: #fff;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.contextMenu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #252127;
+  width: 150px;
+  padding: 8px 0px;
+}
+
+.contextMenuItem {
+  position: relative;
+  display: block;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #d4d3d4;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+
+.contextMenuItem:nth-child(2) {
+  margin-top: 22px;
+}
+
+.contextMenuItem:hover {
+  background-color: #f65261;
+  color: #fff;
+}
+
+.crossButton {
+  border: none;
+  background: none;
+  position: absolute;
+  right: 0;
+  color: #fff;
+  font-size: 24px;
+}
