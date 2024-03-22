@@ -1,11 +1,18 @@
 .contextButton {
   position: relative;
-  padding: 10px;
-  font-size: 25px;
   color: #fff;
-  background: none;
-  border: none;
   cursor: pointer;
+  height: 40px;
+  line-height: 40px;
+  width: 40px;
+  font-size: 1.5em;
+  font-weight: bold;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  cursor: pointer;
+  margin: 8px;
 }
 
 .contextMenu {

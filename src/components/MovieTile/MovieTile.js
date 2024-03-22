@@ -5,9 +5,9 @@ import { joinItems } from "../../helpers/Helpers";
 import { ContextMenu } from "../ContextMenu/ContextMenu";
 
 export default function MovieTile(props) {
-  const { imgUrl, name, releaseYear, genreList, id, handleClick } = props;
+  const { imgUrl, title, releaseDate, genreList, id, onEdit, handleClick } = props;
 
-  if (!name && !genreList && !releaseYear && !imgUrl && !id) {
+  if (!title && !genreList && !releaseDate && !imgUrl && !id) {
     return null;
   }
 
@@ -17,6 +17,7 @@ export default function MovieTile(props) {
 
   const handleEdit = (id) => {
     console.log(`Editing movie with id: ${id}`);
+    onEdit(id);
   };
 
   const handleDelete = (id) => {
@@ -25,14 +26,14 @@ export default function MovieTile(props) {
 
   return (
     <div className={styles.card} key={id} data-testid={id}>
-      <img src={imgUrl} alt={name} onClick={handleCardClick} />
+      <img src={imgUrl} alt={title} onClick={handleCardClick} />
       <div className={styles.contextMenu}>
         <ContextMenu onEdit={handleEdit} onDelete={handleDelete} id={id} />
       </div>
       <div className={styles.descBlock}>
         <div className={styles.detailsBlock}>
-          <h3 className={styles.title}>{name}</h3>
-          <h3 className={styles.year}>{releaseYear}</h3>
+          <h3 className={styles.title}>{title}</h3>
+          <h3 className={styles.year}>{releaseDate}</h3>
         </div>
         <p className={styles.genre}>{joinItems(genreList)}</p>
       </div>

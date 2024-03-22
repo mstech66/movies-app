@@ -13,8 +13,8 @@ export const Default = Template.bind({});
 
 Default.args = {
     imgUrl: 'https://m.media-amazon.com/images/M/MV5BNGYyNmI3M2YtNzYzZS00OTViLTkxYjAtZDIyZmE1Y2U1ZmQ2XkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg',
-    name: 'Your Name',
-    releaseYear: 2016,
+    title: 'Your Name',
+    releaseDate: 2016,
     genreList: ["Anime", "Romance", "Drama"],
     id: 'yourName',
     handleClick: fn()

@@ -12,8 +12,8 @@ export default function MovieDetails(props) {
 
   const {
     imgUrl,
-    name,
-    releaseYear,
+    title,
+    releaseDate,
     genreList,
     rating,
     description,
@@ -21,23 +21,32 @@ export default function MovieDetails(props) {
     id,
   } = data;
 
-  if(!name && !genreList && !releaseYear && !imgUrl && ! id && !rating && !duration && !description){
+  if (
+    !title &&
+    !genreList &&
+    !releaseDate &&
+    !imgUrl &&
+    !id &&
+    !rating &&
+    !duration &&
+    !description
+  ) {
     return null;
   }
 
   return (
     <div className={styles.flexContainer} key={id}>
       <div className={styles.card}>
-        <img src={imgUrl} alt={name} />
+        <img src={imgUrl} alt={title} />
       </div>
       <div className={styles.detailsBlock}>
         <div className={styles.inlineBlock}>
-          <h1>{name}</h1>
+          <h1>{title}</h1>
           <div className={styles.circle}>{rating}</div>
         </div>
         <h5 className={styles.genreList}>{joinItems(genreList)}</h5>
         <div className={styles.inlineBlock}>
-          <h2>{releaseYear}</h2>
+          <h2>{releaseDate}</h2>
           <h2>{duration}</h2>
         </div>
         <p className={styles.descr}>{description}</p>
@@ -48,12 +57,12 @@ export default function MovieDetails(props) {
 
 MovieDetails.propTypes = {
   id: PropTypes.string,
-  name: PropTypes.string,
+  title: PropTypes.string,
   imgUrl: PropTypes.string,
   duration: PropTypes.string,
   genreList: PropTypes.array,
   description: PropTypes.string,
   rating: PropTypes.number,
-  releaseYear: PropTypes.number,
-  handleChange: PropTypes.func
-}
+  releaseDate: PropTypes.number,
+  handleChange: PropTypes.func,
+};
