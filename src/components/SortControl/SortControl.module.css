@@ -1,0 +1,20 @@
+.customSelect{
+    min-width: 300px;
+    position: relative;
+    text-transform: uppercase;
+}
+
+.sortLabel{
+    color: #fff;
+}
+
+.sortSelect{
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    padding: 10px;
+}
+
+.sortSelect:focus{
+    outline: none;
+}

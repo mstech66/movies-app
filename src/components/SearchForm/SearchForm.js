@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 class SearchForm extends React.Component {
   state = {
@@ -30,6 +31,11 @@ class SearchForm extends React.Component {
       </>
     );
   }
+}
+
+SearchForm.propTypes = {
+  initValue: PropTypes.string,
+  onSearch: PropTypes.func
 }
 
 export default SearchForm;

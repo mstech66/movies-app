@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 class Counter extends React.Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class Counter extends React.Component {
       ),
       React.createElement(
         "span",
-        { 'id': 'counterSpan', "data-testid": "counterSpan" },
+        { 'id': 'counterSpan', "data-testid": "counterSpan", 'style': { color: '#fafafa', margin: '8px'} },
         this.state.counter
       ),
       React.createElement(
@@ -47,6 +48,10 @@ class Counter extends React.Component {
       )
     );
   }
+}
+
+Counter.propTypes = {
+  value: PropTypes.string
 }
 
 export default Counter;
