@@ -8,8 +8,8 @@ const movieData = movieList[0];
 
 test('Renders the component correctly with the data', () => {
   render(<MovieDetails {...movieData}/>);
-  expect(screen.getByText(movieData.name)).toBeInTheDocument();
-  expect(screen.getByText(movieData.releaseYear)).toBeInTheDocument();
+  expect(screen.getByText(movieData.title)).toBeInTheDocument();
+  expect(screen.getByText(movieData.releaseDate)).toBeInTheDocument();
   expect(screen.getByText(joinItems(movieData.genreList))).toBeInTheDocument();
   expect(screen.getByText(movieData.duration)).toBeInTheDocument();
   expect(screen.getByText(movieData.description)).toBeInTheDocument();
