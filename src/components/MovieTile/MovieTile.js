@@ -49,4 +49,6 @@ MovieTile.propTypes = {
   genreList: PropTypes.array,
   releaseYear: PropTypes.string,
   handleClick: PropTypes.func,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func
 };

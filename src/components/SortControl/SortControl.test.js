@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import SortControl from './SortControl';
 import '@testing-library/jest-dom'
 
-const optionList = ["releaseYear", "name"];
+const optionList = ["releaseDate", "title"];
 
 test('Renders all the options', () => {
   render(<SortControl />);
@@ -13,14 +13,14 @@ test('Renders all the options', () => {
   }
 });
 
-test('Verify name is selected as default value when passed through props', () => {
-  render(<SortControl defaultValue="name" />);
-  expect(screen.getByTestId('sortSelect')).toHaveValue("name")
+test('Verify title is selected as default value when passed through props', () => {
+  render(<SortControl defaultValue="title" />);
+  expect(screen.getByTestId('sortSelect')).toHaveValue("title")
 });
 
 test('After a click event on SortControl Component calls "handleChange" callback and passes correct value in arguments', async () => {
   const selectHandler = jest.fn(); //this is a mock
-  render(<SortControl defaultValue="releaseYear" handleChange={selectHandler} />);
-  await fireEvent.change(screen.getByTestId('sortSelect'), {target: {value: 'name'}})
-  expect(selectHandler).toHaveBeenCalledWith('name') //verify the mock function called with correct args
+  render(<SortControl defaultValue="releaseDate" handleChange={selectHandler} />);
+  await fireEvent.change(screen.getByTestId('sortSelect'), {target: {value: 'title'}})
+  expect(selectHandler).toHaveBeenCalledWith('title') //verify the mock function called with correct args
 });

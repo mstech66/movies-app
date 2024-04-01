@@ -16,6 +16,8 @@ Default.args = {
     title: 'Your Name',
     releaseDate: 2016,
     genreList: ["Anime", "Romance", "Drama"],
-    id: 'yourName',
-    handleClick: fn()
+    id: 'your_name',
+    handleClick: fn(),
+    onEdit: fn(),
+    onDelete: fn()
 }

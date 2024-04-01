@@ -18,5 +18,5 @@ Default.args = {
     rating: 8.4,
     description: 'Two teenagers share a profound, magical connection upon discovering they are swapping bodies. Things manage to become even more complicated when the boy and girl decide to meet in person.',
     duration: '1 hr 47m',
-    id: 'yourName'
+    id: 'your_name'
 }

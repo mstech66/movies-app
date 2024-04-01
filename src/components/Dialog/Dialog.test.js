@@ -1,24 +1,19 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { render, fireEvent, screen, cleanup } from '@testing-library/react';
 import Dialog from './Dialog';
 
-// test('renders Dialog without crashing', () => {
-//   const onClose = jest.fn();
-//   render(<Dialog onClose={onClose} />);
-// });
+jest.mock('focus-trap-react', () => {
+  return ({ children }) => <div>{children}</div>
+})
 
-beforeEach(()=>{
+beforeEach(() => {
     const modalRoot = document.createElement('div');
-    modalRoot.setAttribute('id', 'modal-root');
+    modalRoot.setAttribute('id', 'modal-root'); 
     document.body.appendChild(modalRoot);
 });
 
-afterEach(()=>{
-    const modalRoot = document.getElementById('modal-root');
-    if (modalRoot) {
-      document.body.removeChild(modalRoot);
-    }
-})
+afterEach(cleanup);
 
 test('renders Dialog with title and children', () => {
   const onClose = jest.fn();
@@ -32,10 +27,14 @@ test('renders Dialog with title and children', () => {
   expect(screen.getByText('Test child')).toBeInTheDocument();
 });
 
-// test('calls onClose prop when close button is clicked', () => {
-//   const onClose = jest.fn();
-//   render(<Dialog title="Test Title" onClose={onClose} />);
-  
-//   fireEvent.click(screen.getByText('×'));
-//   expect(onClose).toHaveBeenCalledTimes(1);
-// });
+test('calls onClose prop when close button is clicked', () => {
+    const onClose = jest.fn();
+    render(
+        <Dialog title="Test Title" onClose={onClose}>
+        <button>Test Button</button>
+        </Dialog>
+    );
+
+    fireEvent.click(screen.getByRole('button',{ name: /×/ }));
+    expect(onClose).toHaveBeenCalledTimes(1);
+});
