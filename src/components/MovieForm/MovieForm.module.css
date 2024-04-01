@@ -8,16 +8,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: block;
     color: #cc4955;
   }
-  input,
-  textarea,
-  select {
+  .genreSelect {
     display: block;
     border-radius: 4px;
     padding: 10px;
     border: none;
     background-color: #2e2e2e;
-    color: #fff;
     margin: 8px 0px;
+    color: #6f6f6f;
+    font-size: 0.85rem;
   }
   textarea {
     min-width: 400px;
@@ -26,13 +25,27 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 }
 
+.inputContainer > input, textarea {
+  display: block;
+  border-radius: 4px;
+  padding: 10px;
+  border: none;
+  background-color: #2e2e2e;
+  color: #fff;
+  margin: 8px 0px;
+}
+
 .inlineContainer {
   display: flex;
   justify-content: space-between;
 }
 
-.inlineContainer input {
+.inlineContainer input:not([type='checkbox']) {
   width: 95%;
+}
+
+.inlineContainer input[type='checkbox'] {
+  accent-color: #cc4955;
 }
 
 .inlineContainer select {
@@ -72,4 +85,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-color: #f65261;
   padding: 10px 28px;
   border-radius: 4px;
+}
+
+.genreSelectContent{
+  position: absolute;
+  background-color: #212121;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  margin-top: 5px;
 }

@@ -24,3 +24,7 @@ export const sortByProperty = (arr, prop) => {
     return 0;
   });
 }
+
+export const generateIdFromTitle = (title) => {
+  return title.toLowerCase().replace(/[^\w\s]/gi, '').replace(/ /g,"_");
+}

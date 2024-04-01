@@ -1,9 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./MovieForm.module.css";
+import { genreList as allGenres } from "../../data/MoviesList";
+import { generateIdFromTitle, joinItems } from "../../helpers/Helpers";
 
 export default function MovieForm({ movie, onSubmit }) {
   const formRef = useRef();
-  let initialState = {
+  let initialState = movie === null ? {
+    id: "",
     title: "",
     releaseDate: "",
     imgUrl: "",
@@ -11,17 +14,46 @@ export default function MovieForm({ movie, onSubmit }) {
     rating: 0,
     duration: "",
     description: "",
-  };
-  const [formData, setFormData] = useState(initialState);
+  } : movie;
+  const [formData, setFormData] = useState(() => {
+    if (movie) {
+      return movie;
+    }
+    return initialState;
+  });
 
-  if (movie) {
-    console.log(movie)
-    setFormData(movie);
-  }
+  useEffect(() => {
+    if (movie) {
+      setFormData(movie);
+    }
+  }, [movie]);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedGenres, setSelectedGenres] = useState(() => {
+    if(movie){
+      return movie.genreList;
+    }
+    return [];
+  });
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
+
+  useEffect(()=> {
+    setFormData(prev => ({...prev, 'genreList': selectedGenres}))
+  }, [selectedGenres])
+
+  const handleGenreToggle = (genre) => {
+    setSelectedGenres((prevGenres) =>
+      prevGenres.includes(genre)
+        ? prevGenres.filter((g) => g !== genre)
+        : [...prevGenres, genre]
+    );
+  };
 
   const handleReset = (e) => {
     e.preventDefault();
-    formRef.current.reset();
+    setFormData(initialState);
+    setSelectedGenres(initialState?.genreList || []);
   };
 
   const handleChange = (e) => {
@@ -32,8 +64,11 @@ export default function MovieForm({ movie, onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    console.log(formData);
+    const finalFormData = {
+      ...formData,
+      id: generateIdFromTitle(formData.title)
+    }
+    onSubmit(finalFormData);
   };
 
   return (
@@ -44,7 +79,8 @@ export default function MovieForm({ movie, onSubmit }) {
           <input
             id="title"
             name="title"
-            defaultValue={formData.title || ""}
+            data-testid='title'
+            value={formData?.title || ""}
             placeholder="Title"
             onChange={handleChange}
           />
@@ -55,7 +91,8 @@ export default function MovieForm({ movie, onSubmit }) {
             id="releaseDate"
             type="text"
             name="releaseDate"
-            defaultValue={formData.releaseDate || ""}
+            data-testid='releaseDate'
+            value={formData?.releaseDate || ""}
             placeholder="Select Date"
             onFocus={(e) => (e.target.type = "date")}
             onBlur={(e) => (e.target.type = "text")}
@@ -69,7 +106,8 @@ export default function MovieForm({ movie, onSubmit }) {
           <input
             id="imgUrl"
             name="imgUrl"
-            defaultValue={formData.imgUrl || ""}
+            data-testid='imgUrl'
+            value={formData?.imgUrl || ""}
             placeholder="https://"
             onChange={handleChange}
           />
@@ -79,7 +117,8 @@ export default function MovieForm({ movie, onSubmit }) {
           <input
             id="rating"
             name="rating"
-            defaultValue={formData.rating || ""}
+            data-testid='rating'
+            value={formData?.rating || ""}
             placeholder="7.8"
             onChange={handleChange}
           />
@@ -88,18 +127,42 @@ export default function MovieForm({ movie, onSubmit }) {
       <div className={styles.inlineContainer}>
         <div className={styles.inputContainer}>
           <label>Genre</label>
-          <select onChange={handleChange}>
-            <option>Action</option>
-            <option>Horror</option>
-            <option>Comedy</option>
-          </select>
+          <div>
+            <div
+              onClick={toggleDropdown}
+              className={styles.genreSelect}
+              data-testid='genreSelect'
+            >
+              {selectedGenres.length > 0
+                ? joinItems(selectedGenres)
+                : "Select Genre"}
+            </div>
+            {isOpen && (
+              <div
+                className={styles.genreSelectContent}
+              >
+                {allGenres.map((genre) => (
+                  <div key={genre} style={{ padding: "10px" }}>
+                    <input
+                      type="checkbox"
+                      data-testid={genre}
+                      checked={selectedGenres.includes(genre)}
+                      onChange={() => handleGenreToggle(genre)}
+                    />
+                    {genre}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div className={styles.inputContainer}>
           <label>Runtime</label>
           <input
             id="duration"
             name="duration"
-            defaultValue={formData.duration || ""}
+            data-testid='duration'
+            value={formData?.duration || ""}
             placeholder="minutes"
             onChange={handleChange}
           />
@@ -110,16 +173,17 @@ export default function MovieForm({ movie, onSubmit }) {
         <textarea
           id="description"
           name="description"
-          defaultValue={formData.description || ""}
+          data-testid='description'
+          value={formData?.description || ""}
           placeholder="Movie Description"
           onChange={handleChange}
         />
       </div>
       <div className={styles.btnGroup}>
-        <button className={styles.secondaryBtn} onClick={handleReset}>
+        <button className={styles.secondaryBtn} onClick={handleReset} data-testid='resetBtn'>
           Reset
         </button>
-        <button className={styles.primaryBtn} type="submit">
+        <button className={styles.primaryBtn} type="submit" data-testid='submitBtn'>
           Submit
         </button>
       </div>

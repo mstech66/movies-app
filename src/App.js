@@ -4,12 +4,13 @@ import Counter from "./components/Counter/Counter";
 import GenreSelect from "./components/GenreSelect/GenreSelect";
 import MovieTile from "./components/MovieTile/MovieTile";
 import SearchForm from "./components/SearchForm/SearchForm";
-import { movieList } from "./data/MoviesList";
+import { movieList, genreList } from "./data/MoviesList";
 import MovieDetails from "./components/MovieDetails/MovieDetails";
 import { findObjectById, sortByProperty } from "./helpers/Helpers";
 import SortControl from "./components/SortControl/SortControl";
 import Dialog from "./components/Dialog/Dialog";
 import MovieForm from "./components/MovieForm/MovieForm";
+import DeleteMovie from "./components/DeleteMovie/DeleteMovie";
 
 function handleSearch(value) {
   console.log("Searching for", value);
@@ -19,13 +20,12 @@ function handleSelect(value) {
   console.log(value);
 }
 
-const genreList = ["Crime", "Documentary", "Horror", "Comedy"];
-
 function App() {
   const [movieDetail, setMovieDetail] = useState(null);
   const [sortBy, setSortBy] = useState("releaseDate");
   const [movies, setMovies] = useState(sortByProperty(movieList, sortBy));
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentMovie, setCurrentMovie] = useState(null);
+  const [currentDialog, setCurrentDialog] = useState(null);
 
   const handleMovieCardClick = async (value) => {
     await findObjectById(movieList, value).then((res) => {
@@ -38,19 +38,28 @@ function App() {
   };
 
   const handleClose = () => {
-    setIsDialogOpen(!isDialogOpen);
+    setCurrentDialog(null);
   };
 
   const handleSubmit = (value) => {
-    setIsDialogOpen(!isDialogOpen);
-    console.log(value);
+    setCurrentDialog(null);
+    console.log("Adding movie", value);
   };
 
-  const handleEdit = async(id) => {
+  const handleEdit = async (id) => {
     await findObjectById(movieList, id).then((res) => {
-      setMovieDetail(res);
-      setIsDialogOpen(true);
+      setCurrentMovie(res);
+      setCurrentDialog("edit");
     });
+    console.log("Editing for", currentMovie);
+  };
+
+  const handleDelete = async (id) => {
+    await findObjectById(movieList, id).then((res) => {
+      setCurrentMovie(res);
+      setCurrentDialog("delete");
+    });
+    console.log("Deleting for", currentMovie);
   };
 
   useEffect(() => {
@@ -74,14 +83,24 @@ function App() {
           <br />
           <button
             onClick={() => {
-              setIsDialogOpen(true);
+              setCurrentDialog("add");
             }}
           >
             Add Movie
           </button>
-          {isDialogOpen && (
+          {currentDialog === "add" && (
             <Dialog title={"Add Movie"} onClose={handleClose}>
-              <MovieForm movie={movieDetail} onSubmit={handleSubmit} />
+              <MovieForm onSubmit={handleSubmit} />
+            </Dialog>
+          )}
+          {currentDialog === "edit" && (
+            <Dialog title={"Edit Movie"} onClose={handleClose}>
+              <MovieForm movie={currentMovie} onSubmit={handleSubmit} />
+            </Dialog>
+          )}
+          {currentDialog === "delete" && (
+            <Dialog title={"Delete Movie"} onClose={handleClose}>
+              <DeleteMovie id={currentMovie.id} onDelete={handleDelete} />
             </Dialog>
           )}
         </>
@@ -95,6 +114,7 @@ function App() {
               {...movie}
               key={movie.id}
               onEdit={async () => await handleEdit(movie.id)}
+              onDelete={async () => await handleDelete(movie.id)}
               handleClick={async () => await handleMovieCardClick(movie.id)}
             />
           );
