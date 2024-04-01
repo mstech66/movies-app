@@ -5,7 +5,7 @@ import { joinItems } from "../../helpers/Helpers";
 import { ContextMenu } from "../ContextMenu/ContextMenu";
 
 export default function MovieTile(props) {
-  const { imgUrl, title, releaseDate, genreList, id, onEdit, handleClick } = props;
+  const { imgUrl, title, releaseDate, genreList, id, onEdit, onDelete, handleClick } = props;
 
   if (!title && !genreList && !releaseDate && !imgUrl && !id) {
     return null;
@@ -15,18 +15,19 @@ export default function MovieTile(props) {
     await handleClick(id);
   };
 
-  const handleEdit = (id) => {
+  const handleEdit = async (id) => {
     console.log(`Editing movie with id: ${id}`);
-    onEdit(id);
+    await onEdit(id);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     console.log(`Deleting movie with id: ${id}`);
+    await onDelete(id);
   };
 
   return (
     <div className={styles.card} key={id} data-testid={id}>
-      <img src={imgUrl} alt={title} onClick={handleCardClick} />
+      <img src={imgUrl} data-testid={`${id}-img`} alt={title} onClick={handleCardClick} />
       <div className={styles.contextMenu}>
         <ContextMenu onEdit={handleEdit} onDelete={handleDelete} id={id} />
       </div>
@@ -46,6 +47,6 @@ MovieTile.propTypes = {
   name: PropTypes.string,
   imgUrl: PropTypes.string,
   genreList: PropTypes.array,
-  releaseYear: PropTypes.number,
+  releaseYear: PropTypes.string,
   handleClick: PropTypes.func,
 };

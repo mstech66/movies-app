@@ -1,0 +1,16 @@
+.btnGroup {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+  margin-right: 0.7rem;
+  margin-top: 1rem;
+}
+
+.primaryBtn {
+  border: 2px solid black;
+  background: #f65261;
+  color: #fff;
+  border-color: #f65261;
+  padding: 10px 28px;
+  border-radius: 4px;
+}

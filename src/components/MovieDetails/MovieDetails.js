@@ -63,6 +63,6 @@ MovieDetails.propTypes = {
   genreList: PropTypes.array,
   description: PropTypes.string,
   rating: PropTypes.number,
-  releaseDate: PropTypes.number,
+  releaseDate: PropTypes.string,
   handleChange: PropTypes.func,
 };
