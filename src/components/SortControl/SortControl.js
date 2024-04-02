@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 export default function SortControl(props) {
   return (
     <div className={styles.customSelect}>
-      <label className={styles.sortLabel}>Sort By: </label>
+      <label className={styles.sortLabel}>Sort By </label>
       <select
         defaultValue={props.defaultValue}
         className={styles.sortSelect}
@@ -14,7 +14,7 @@ export default function SortControl(props) {
         }}
         data-testid="sortSelect"
       >
-        <option value="releaseDate">RELEASE DATE</option>
+        <option value="release_date">RELEASE DATE</option>
         <option value="title">TITLE</option>
       </select>
     </div>

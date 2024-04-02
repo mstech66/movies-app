@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./MovieForm.module.css";
 import { genreList as allGenres } from "../../data/MoviesList";
-import { generateIdFromTitle, joinItems } from "../../helpers/Helpers";
+import { getRandomId, joinItems } from "../../helpers/Helpers";
 
 export default function MovieForm({ movie, onSubmit }) {
   const formRef = useRef();
   let initialState = movie === null ? {
     id: "",
     title: "",
-    releaseDate: "",
-    imgUrl: "",
-    genreList: [],
-    rating: 0,
-    duration: "",
-    description: "",
+    release_date: "",
+    poster_path: "",
+    genres: [],
+    vote_average: 0,
+    runtime: "",
+    overview: "",
   } : movie;
   const [formData, setFormData] = useState(() => {
     if (movie) {
@@ -31,7 +31,7 @@ export default function MovieForm({ movie, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState(() => {
     if(movie){
-      return movie.genreList;
+      return movie.genres;
     }
     return [];
   });
@@ -39,7 +39,7 @@ export default function MovieForm({ movie, onSubmit }) {
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   useEffect(()=> {
-    setFormData(prev => ({...prev, 'genreList': selectedGenres}))
+    setFormData(prev => ({...prev, 'genres': selectedGenres}))
   }, [selectedGenres])
 
   const handleGenreToggle = (genre) => {
@@ -53,7 +53,7 @@ export default function MovieForm({ movie, onSubmit }) {
   const handleReset = (e) => {
     e.preventDefault();
     setFormData(initialState);
-    setSelectedGenres(initialState?.genreList || []);
+    setSelectedGenres(initialState?.genres || []);
   };
 
   const handleChange = (e) => {
@@ -66,7 +66,7 @@ export default function MovieForm({ movie, onSubmit }) {
     e.preventDefault();
     const finalFormData = {
       ...formData,
-      id: generateIdFromTitle(formData.title)
+      id: formData.id || getRandomId()
     }
     onSubmit(finalFormData);
   };
@@ -90,9 +90,9 @@ export default function MovieForm({ movie, onSubmit }) {
           <input
             id="releaseDate"
             type="text"
-            name="releaseDate"
+            name="release_date"
             data-testid='releaseDate'
-            value={formData?.releaseDate || ""}
+            value={formData?.release_date || ""}
             placeholder="Select Date"
             onFocus={(e) => (e.target.type = "date")}
             onBlur={(e) => (e.target.type = "text")}
@@ -105,9 +105,9 @@ export default function MovieForm({ movie, onSubmit }) {
           <label>Movie URL</label>
           <input
             id="imgUrl"
-            name="imgUrl"
+            name="poster_path"
             data-testid='imgUrl'
-            value={formData?.imgUrl || ""}
+            value={formData?.poster_path || ""}
             placeholder="https://"
             onChange={handleChange}
           />
@@ -116,9 +116,9 @@ export default function MovieForm({ movie, onSubmit }) {
           <label>Rating</label>
           <input
             id="rating"
-            name="rating"
+            name="vote_average"
             data-testid='rating'
-            value={formData?.rating || ""}
+            value={formData?.vote_average || ""}
             placeholder="7.8"
             onChange={handleChange}
           />
@@ -160,9 +160,9 @@ export default function MovieForm({ movie, onSubmit }) {
           <label>Runtime</label>
           <input
             id="duration"
-            name="duration"
+            name="runtime"
             data-testid='duration'
-            value={formData?.duration || ""}
+            value={formData?.runtime || ""}
             placeholder="minutes"
             onChange={handleChange}
           />
@@ -172,9 +172,9 @@ export default function MovieForm({ movie, onSubmit }) {
         <label>Overview</label>
         <textarea
           id="description"
-          name="description"
+          name="overview"
           data-testid='description'
-          value={formData?.description || ""}
+          value={formData?.overview || ""}
           placeholder="Movie Description"
           onChange={handleChange}
         />

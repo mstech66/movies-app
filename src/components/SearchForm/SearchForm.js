@@ -1,5 +1,6 @@
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import styles from "./SearchForm.module.css";
 
 class SearchForm extends React.Component {
   state = {
@@ -8,10 +9,11 @@ class SearchForm extends React.Component {
 
   render() {
     return (
-      <>
+      <div className={styles.inlineContainer}>
         <input
+          className={styles.searchInput}
           defaultValue={this.props.initValue}
-          onFocus={this.props.onSearch}
+          placeholder="What do you want to watch?"
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               this.props.onSearch(e.target.value);
@@ -23,19 +25,20 @@ class SearchForm extends React.Component {
           data-testid="searchInput"
         />
         <button
+          className={styles.searchBtn}
           onClick={(e) => this.props.onSearch(this.state.inputValue)}
           data-testid="searchBtn"
         >
           Search
         </button>
-      </>
+      </div>
     );
   }
 }
 
 SearchForm.propTypes = {
   initValue: PropTypes.string,
-  onSearch: PropTypes.func
-}
+  onSearch: PropTypes.func,
+};
 
 export default SearchForm;

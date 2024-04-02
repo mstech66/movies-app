@@ -16,7 +16,7 @@ export const movieList = [
     title: "Bohemian Rhapsody",
     imgUrl: "https://m.media-amazon.com/images/I/91Of83+qeoL.jpg",
     genreList: ["Drama", "Biography", "Music"],
-    releaseDate: 2004,
+    releaseDate: "2004-01-01",
     rating: 8.9,
     duration: "2 hr 34 min",
     description:
@@ -28,7 +28,7 @@ export const movieList = [
     imgUrl:
       "https://m.media-amazon.com/images/M/MV5BNmFiYmJmN2QtNWQwMi00MzliLThiOWMtZjQxNGRhZTQ1MjgyXkEyXkFqcGdeQXVyNzQ1ODk3MTQ@._V1_FMjpg_UX1000_.jpg",
     genreList: ["Oscar Winning Movie"],
-    releaseDate: 1994,
+    releaseDate: "1994-01-01",
     rating: 8.1,
     duration: "2 hr 34 min",
     description:
