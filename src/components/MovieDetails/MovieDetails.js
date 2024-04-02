@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./MovieDetails.module.css";
-import { joinItems } from "../../helpers/Helpers";
+import { convertTimeToReadableString, joinItems } from "../../helpers/Helpers";
 
 export default function MovieDetails(props) {
   const [data, setData] = useState(props);
@@ -11,25 +11,25 @@ export default function MovieDetails(props) {
   }, [props]);
 
   const {
-    imgUrl,
+    poster_path,
     title,
-    releaseDate,
-    genreList,
-    rating,
-    description,
-    duration,
+    release_date,
+    genres,
+    vote_average,
+    overview,
+    runtime,
     id,
   } = data;
 
   if (
     !title &&
-    !genreList &&
-    !releaseDate &&
-    !imgUrl &&
+    !genres &&
+    !release_date &&
+    !poster_path &&
     !id &&
-    !rating &&
-    !duration &&
-    !description
+    !vote_average &&
+    !runtime &&
+    !overview
   ) {
     return null;
   }
@@ -37,32 +37,32 @@ export default function MovieDetails(props) {
   return (
     <div className={styles.flexContainer} key={id}>
       <div className={styles.card}>
-        <img src={imgUrl} alt={title} />
+        <img src={poster_path} alt={title} />
       </div>
       <div className={styles.detailsBlock}>
         <div className={styles.inlineBlock}>
           <h1>{title}</h1>
-          <div className={styles.circle}>{rating}</div>
+          <div className={styles.circle}>{vote_average}</div>
         </div>
-        <h5 className={styles.genreList}>{joinItems(genreList)}</h5>
+        <h5 className={styles.genres}>{joinItems(genres)}</h5>
         <div className={styles.inlineBlock}>
-          <h2>{releaseDate}</h2>
-          <h2>{duration}</h2>
+          <h2>{new Date(release_date).getFullYear()}</h2>
+          <h2>{convertTimeToReadableString(runtime)}</h2>
         </div>
-        <p className={styles.descr}>{description}</p>
+        <p className={styles.descr}>{overview}</p>
       </div>
     </div>
   );
 }
 
 MovieDetails.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.number,
   title: PropTypes.string,
-  imgUrl: PropTypes.string,
-  duration: PropTypes.string,
-  genreList: PropTypes.array,
-  description: PropTypes.string,
-  rating: PropTypes.number,
-  releaseDate: PropTypes.string,
+  poster_path: PropTypes.string,
+  runtime: PropTypes.number,
+  genres: PropTypes.array,
+  overview: PropTypes.string,
+  vote_average: PropTypes.number,
+  release_date: PropTypes.string,
   handleChange: PropTypes.func,
 };
