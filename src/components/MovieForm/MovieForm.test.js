@@ -1,7 +1,6 @@
-import { fireEvent, getByTestId, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { movieList } from "../../data/MoviesList";
-import { joinItems } from "../../helpers/Helpers";
 import MovieForm from "./MovieForm";
 
 const movieData = movieList[0];
@@ -20,6 +19,7 @@ test("Updates on the input change", () => {
 
 test("Submits data properly", () => {
     const submitHandler = jest.fn();
+    const {title, release_date, genres, poster_path, vote_average, overview, runtime} = movieData;
     render(<MovieForm onSubmit={submitHandler} />);
     const titleInputField = screen.getByTestId("title");
     const releaseDateInputField = screen.getByTestId("releaseDate");
@@ -29,25 +29,32 @@ test("Submits data properly", () => {
     const genreSelect = screen.getByTestId("genreSelect");
     const descrInputField = screen.getByTestId("description");
     const submitBtn = screen.getByTestId("submitBtn");
-    fireEvent.change(titleInputField, { target: { value: movieData.title } });
-    fireEvent.change(releaseDateInputField, { target: { value: movieData.releaseDate } });
-    fireEvent.change(imgUrlInputField, { target: { value: movieData.imgUrl } });
-    fireEvent.change(ratingInputField, { target: { value: movieData.rating } });
-    fireEvent.change(descrInputField, { target: { value: movieData.description } });
-    fireEvent.change(durationInputField, { target: { value: movieData.duration } });
+    fireEvent.change(titleInputField, { target: { value: title } });
+    fireEvent.change(releaseDateInputField, { target: { value: release_date } });
+    fireEvent.change(imgUrlInputField, { target: { value: poster_path } });
+    fireEvent.change(ratingInputField, { target: { value: vote_average } });
+    fireEvent.change(descrInputField, { target: { value: overview } });
+    fireEvent.change(durationInputField, { target: { value: runtime } });
     fireEvent.click(genreSelect);
-    movieData.genreList.forEach(genre => {
+    movieData.genres.forEach(genre => {
         fireEvent.click(screen.getByTestId(genre));
     });
-    expect(titleInputField.value).toBe(movieData.title);
-    expect(releaseDateInputField.value).toBe(movieData.releaseDate);
-    expect(imgUrlInputField.value).toBe(movieData.imgUrl);
-    expect(ratingInputField.value).toBe(`${movieData.rating}`);
-    expect(descrInputField.value).toBe(movieData.description);
-    expect(durationInputField.value).toBe(movieData.duration);
+    expect(titleInputField.value).toBe(title);
+    expect(releaseDateInputField.value).toBe(release_date);
+    expect(imgUrlInputField.value).toBe(poster_path);
+    expect(ratingInputField.value).toBe(`${vote_average}`);
+    expect(descrInputField.value).toBe(overview);
+    expect(durationInputField.value).toBe(`${runtime}`);
     fireEvent.click(submitBtn);
-    const expectedObj = {...movieData, id: "pulp_fiction", rating: "8.9"};
-    expect(submitHandler).toHaveBeenCalledWith(expectedObj);
+    expect(submitHandler).toHaveBeenCalledWith(expect.objectContaining({
+        'title': title,
+        'vote_average': `${vote_average}`,
+        'overview': overview,
+        'runtime': `${runtime}`,
+        'genres': genres,
+        'poster_path': poster_path,
+        'release_date': release_date
+    }));
 });
 
 test("Populates data properly when movie object is passed through props", () => {
@@ -61,12 +68,12 @@ test("Populates data properly when movie object is passed through props", () => 
     const genreSelect = screen.getByTestId("genreSelect");
     const descrInputField = screen.getByTestId("description");
     expect(titleInputField.value).toBe(movieData.title);
-    expect(releaseDateInputField.value).toBe(movieData.releaseDate);
-    expect(imgUrlInputField.value).toBe(movieData.imgUrl);
-    expect(ratingInputField.value).toBe(`${movieData.rating}`);
-    expect(descrInputField.value).toBe(movieData.description);
-    expect(durationInputField.value).toBe(movieData.duration);
-    expect(genreSelect.innerHTML).toContain(movieData.genreList[0], movieData.genreList[1]);
+    expect(releaseDateInputField.value).toBe(movieData.release_date);
+    expect(imgUrlInputField.value).toBe(movieData.poster_path);
+    expect(ratingInputField.value).toBe(`${movieData.vote_average}`);
+    expect(descrInputField.value).toBe(movieData.overview);
+    expect(durationInputField.value).toBe(`${movieData.runtime}`);
+    expect(genreSelect.innerHTML).toContain(movieData.genres[0], movieData.genres[1]);
 });
 
 test("Resets data properly", () => {

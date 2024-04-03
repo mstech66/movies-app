@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import MovieTile from "./MovieTile";
 import "@testing-library/jest-dom";
 import { movieList } from "../../data/MoviesList";
@@ -9,8 +9,8 @@ const movieData = movieList[0];
 test("Renders the component correctly with the data", () => {
   render(<MovieTile {...movieData} />);
   expect(screen.getByText(movieData.title)).toBeInTheDocument();
-  expect(screen.getByText(movieData.releaseDate)).toBeInTheDocument();
-  expect(screen.getByText(joinItems(movieData.genreList))).toBeInTheDocument();
+  expect(screen.getByText(new Date(movieData.release_date).getFullYear())).toBeInTheDocument();
+  expect(screen.getByText(joinItems(movieData.genres))).toBeInTheDocument();
 });
 
 test("renders withoutcrashing", () => {

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./MovieForm.module.css";
 import { genreList as allGenres } from "../../data/MoviesList";
 import { getRandomId, joinItems } from "../../helpers/Helpers";
+import PropTypes from "prop-types";
 
 export default function MovieForm({ movie, onSubmit }) {
   const formRef = useRef();
@@ -190,3 +191,15 @@ export default function MovieForm({ movie, onSubmit }) {
     </form>
   );
 }
+
+MovieForm.propTypes = {
+  id: PropTypes.number,
+  title: PropTypes.string,
+  poster_path: PropTypes.string,
+  genres: PropTypes.array,
+  release_date: PropTypes.string,
+  overview: PropTypes.string,
+  vote_average: PropTypes.number,
+  runtime: PropTypes.number,
+  onSubmit: PropTypes.func
+};

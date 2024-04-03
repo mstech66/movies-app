@@ -7,8 +7,8 @@ class GenreSelect extends React.Component {
     return (
       <ul className={styles.genreSelectUl}>
         {this.props.genreList.map((genre) => (
-          <li key={genre} value={genre} className={styles.genreSelectItem}>
-            <button value={genre} onClick={(event)=> {
+          <li key={genre} data-testid={`item-${genre}`} value={genre} className={styles.genreSelectItem} aria-current={genre === this.props.activeGenre}>
+            <button value={genre} data-testid={`btn-${genre}`} onClick={(event)=> {
               this.props.onSelect(event.target.value);
             }} style={{borderBottom: this.props.activeGenre === genre ? '2px solid #F65261' : 'none'}}>{genre}</button>
           </li>
@@ -20,7 +20,7 @@ class GenreSelect extends React.Component {
 
 GenreSelect.propTypes = {
   genreList: PropTypes.array,
-  selectedGenre: PropTypes.string,
+  activeGenre: PropTypes.string,
   onSelect: PropTypes.func
 }
 

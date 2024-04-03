@@ -2,6 +2,7 @@ import FocusTrap from "focus-trap-react";
 import React from "react";
 import ReactDOM from "react-dom";
 import styles from "./Dialog.module.css";
+import PropTypes from "prop-types";
 
 export default function Dialog({ title, children, onClose }) {
   const handleClose = () => {
@@ -23,4 +24,10 @@ export default function Dialog({ title, children, onClose }) {
     </FocusTrap>,
     document.getElementById("modal-root")
   );
+}
+
+Dialog.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.object,
+  onClose: PropTypes.func
 }
