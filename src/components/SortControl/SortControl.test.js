@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import SortControl from './SortControl';
 import '@testing-library/jest-dom'
 
-const optionList = ["releaseDate", "title"];
+const optionList = ["release_date", "title"];
 
 test('Renders all the options', () => {
   render(<SortControl />);

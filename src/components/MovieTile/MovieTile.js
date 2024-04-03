@@ -25,9 +25,14 @@ export default function MovieTile(props) {
     await onDelete(id);
   };
 
+  const handleError = (event) => {
+    event.target.onerror = null;
+    event.target.src = 'https://ih1.redbubble.net/image.533910704.5853/fposter,small,wall_texture,product,750x1000.u3.jpg';
+  }
+
   return (
     <div className={styles.card} key={id} data-testid={id}>
-      <img src={poster_path} data-testid={`${id}-img`} alt={title} onClick={handleCardClick} />
+      <img src={poster_path} data-testid={`${id}-img`} alt={title} onClick={handleCardClick} onError={handleError}/>
       <div className={styles.contextMenu}>
         <ContextMenu onEdit={handleEdit} onDelete={handleDelete} id={id} />
       </div>

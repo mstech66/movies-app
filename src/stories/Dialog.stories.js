@@ -25,10 +25,16 @@ const ModalRoot = ({ children }) => {
     return isMounted ? children: null;
 };
 
-export const Default = () => (
+export const Default = (args) => (
     <ModalRoot>
-        <Dialog title="Default Title" onClose={()=> fn()}>
-            Default Message
+        <Dialog title={args.title} onClose={args.onClose}>
+            {args.children}
         </Dialog>
     </ModalRoot>
 );
+
+Default.args = {
+    title: 'Test Dialog',
+    children: 'Message',
+    onClose: fn()
+}
