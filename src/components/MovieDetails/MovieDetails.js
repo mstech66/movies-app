@@ -1,38 +1,35 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./MovieDetails.module.css";
-import { convertTimeToReadableString, joinItems } from "../../helpers/Helpers";
+import { convertTimeToReadableString, fetchMovie, joinItems } from "../../helpers/Helpers";
+import { useParams } from "react-router-dom";
 
-export default function MovieDetails(props) {
-  const [data, setData] = useState(props);
+export default function MovieDetails() {
+  const [data, setData] = useState(null);
+  const { movieId } = useParams();
 
   useEffect(() => {
-    setData(props);
-  }, [props]);
+    const fetchDetails = async() => {
+      const fetchedMovie = await fetchMovie(movieId);
+      setData(fetchedMovie)
+    }
+    fetchDetails();
+  }, [movieId]);
+
+  if(!data){
+    return <div>Loading...</div>
+  }
 
   const {
-    poster_path,
+    id,
     title,
     release_date,
     genres,
     vote_average,
     overview,
     runtime,
-    id,
+    poster_path
   } = data;
-
-  if (
-    !title &&
-    !genres &&
-    !release_date &&
-    !poster_path &&
-    !id &&
-    !vote_average &&
-    !runtime &&
-    !overview
-  ) {
-    return null;
-  }
 
   return (
     <div className={styles.flexContainer} key={id}>
