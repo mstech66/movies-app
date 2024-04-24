@@ -26,7 +26,10 @@ class SearchForm extends React.Component {
         />
         <button
           className={styles.searchBtn}
-          onClick={(e) => this.props.onSearch(this.state.inputValue)}
+          onClick={(e) => {
+            e.preventDefault()
+            this.props.onSearch(this.state.inputValue)
+          }}
           data-testid="searchBtn"
         >
           Search

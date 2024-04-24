@@ -51,6 +51,13 @@ export default function MovieListPage() {
     navigate(`/${id}`);
   };
 
+  const handleClear = () => {
+    setActiveGenre("All")
+    setSortBy("release_date")
+    setSearchQuery("")
+    navigate(`/`);
+  };
+
   const handleSort = (value) => {
     let params = new URLSearchParams(searchParams.toString());
     value ? params.set("sortBy", value) : params.delete("sortBy");
@@ -120,6 +127,7 @@ export default function MovieListPage() {
           className={styles.appNameTitle}
           onClick={() => {
             setSelectedMovie(null);
+            handleClear();
           }}
         >
           <h2>netflixroulette</h2>
