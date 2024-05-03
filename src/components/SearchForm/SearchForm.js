@@ -9,7 +9,7 @@ class SearchForm extends React.Component {
 
   render() {
     return (
-      <div className={styles.inlineContainer}>
+      <div className={styles.inlineContainer} id="searchForm">
         <input
           className={styles.searchInput}
           defaultValue={this.props.initValue}

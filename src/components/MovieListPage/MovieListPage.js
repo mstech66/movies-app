@@ -124,6 +124,7 @@ export default function MovieListPage() {
     <>
       <div className={styles.navBar}>
         <button
+          id="appNameTitle"
           className={styles.appNameTitle}
           onClick={() => {
             setSelectedMovie(null);
@@ -142,6 +143,7 @@ export default function MovieListPage() {
           </button>
         ) : (
           <button
+            id="addBtn"
             className={styles.addBtn}
             onClick={() => {
               setCurrentDialog("add");

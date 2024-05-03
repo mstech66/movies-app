@@ -5,7 +5,7 @@ import styles from './GenreSelect.module.css';
 class GenreSelect extends React.Component {
   render() {
     return (
-      <ul className={styles.genreSelectUl}>
+      <ul className={styles.genreSelectUl} id="genreSelectUl">
         {this.props.genreList.map((genre) => (
           <li key={genre} data-testid={`item-${genre}`} value={genre} className={styles.genreSelectItem} aria-current={genre === this.props.activeGenre}>
             <button value={genre} data-testid={`btn-${genre}`} onClick={(event)=> {
