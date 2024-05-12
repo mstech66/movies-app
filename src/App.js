@@ -5,6 +5,9 @@ import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import SearchForm from "./components/SearchForm/SearchForm";
 import MovieDetails from "./components/MovieDetails/MovieDetails";
 import { fetchMovies } from "./helpers/Helpers";
+import AddMovieForm from "./components/AddMovieForm/AddMovieForm";
+import EditMovieForm from "./components/EditMovieForm/EditMovieForm";
+import DeleteMovieForm from "./components/DeleteMovieForm/DeleteMovieForm";
 
 const router = createBrowserRouter([
   {
@@ -12,8 +15,17 @@ const router = createBrowserRouter([
     element: <MovieListPage />,
     loader: loader,
     children: [
-      { path: "/", element: <SearchForm /> },
-      { path: "/:movieId", element: <MovieDetails /> },
+      {
+        path: "/",
+        element: <SearchForm />,
+        children: [{ path: "/new", element: <AddMovieForm /> }],
+      },
+      {
+        path: "/:movieId",
+        element: <MovieDetails />,
+      },
+      { path: "/:movieId/edit", element: <EditMovieForm /> },
+      { path: "/:movieId/delete", element: <DeleteMovieForm /> },
     ],
   },
 ]);

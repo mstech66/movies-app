@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "./MovieListPage.module.css";
-import { fetchMovies, findObjectById } from "../../helpers/Helpers";
+import { fetchMovies } from "../../helpers/Helpers";
 import MovieTile from "../MovieTile/MovieTile";
-import SearchForm from "../SearchForm/SearchForm";
-import MovieDetails from "../MovieDetails/MovieDetails";
-import Dialog from "../Dialog/Dialog";
-import MovieForm from "../MovieForm/MovieForm";
-import DeleteMovie from "../DeleteMovie/DeleteMovie";
 import SortControl from "../SortControl/SortControl";
 import GenreSelect from "../GenreSelect/GenreSelect";
 import { FaSearch } from "react-icons/fa";
 import {
+  Outlet,
   useLoaderData,
   useNavigate,
   useParams,
@@ -33,8 +29,6 @@ export default function MovieListPage() {
   );
   const { movies: initialMovies } = useLoaderData();
   const [movies, setMovies] = useState(initialMovies);
-  const [currentMovie, setCurrentMovie] = useState(null);
-  const [currentDialog, setCurrentDialog] = useState(null);
   const navigate = useNavigate();
   const { movieId } = useParams();
 
@@ -44,6 +38,10 @@ export default function MovieListPage() {
     setSearchParams(params);
     setSearchQuery(value);
     navigate(`?${params.toString()}`);
+  }
+
+  function handleAdd(){
+    navigate(`/new`);
   }
 
   const handleMovieCardClick = async (id) => {
@@ -74,37 +72,6 @@ export default function MovieListPage() {
     navigate(`?${params.toString()}`);
   };
 
-  const handleClose = () => {
-    setCurrentDialog(null);
-  };
-
-  const handleSubmit = (value) => {
-    setCurrentDialog(null);
-    console.log("Adding movie", value);
-  };
-
-  const handleEdit = async (id) => {
-    await findObjectById(movies, id).then((res) => {
-      setCurrentMovie(res);
-      setCurrentDialog("edit");
-    });
-    console.log("Editing for", currentMovie);
-  };
-
-  const handleDelete = async (id) => {
-    await findObjectById(movies, id).then((res) => {
-      setCurrentMovie(res);
-      setCurrentDialog("delete");
-    });
-    console.log("Deleting for", currentMovie);
-  };
-
-  const onMovieDelete = async (id) => {
-    console.log("Deleting finally for", id);
-    //todo: delete logic
-    setCurrentDialog(null);
-  };
-
   useEffect(() => {
     const fetchNewMovies = async () => {
       const fetchedMovies = await fetchMovies(sortBy, activeGenre, searchQuery);
@@ -119,6 +86,14 @@ export default function MovieListPage() {
       setSelectedMovie(movieId);
     }
   }, [movieId]);
+
+  const handleEdit = (id) => {
+    navigate(`/${id}/edit`);
+  }
+
+  const handleDelete = (id) => {
+    navigate(`/${id}/delete`);
+  }
 
   return (
     <>
@@ -146,19 +121,20 @@ export default function MovieListPage() {
             id="addBtn"
             className={styles.addBtn}
             onClick={() => {
-              setCurrentDialog("add");
+              handleAdd();
             }}
           >
             + ADD MOVIE
           </button>
         )}
       </div>
-      {selectedMovie === null ? (
+      {/* {selectedMovie === null ? (
         <SearchForm initValue={`${searchQuery}`} onSearch={handleSearch} />
       ) : (
         <MovieDetails />
-      )}
-      {currentDialog === "add" && (
+      )} */}
+      <Outlet context={[searchQuery, handleSearch]}/>
+      {/* {currentDialog === "add" && (
         <Dialog title={"Add Movie"} onClose={handleClose}>
           <MovieForm onSubmit={handleSubmit} />
         </Dialog>
@@ -172,7 +148,7 @@ export default function MovieListPage() {
         <Dialog title={"Delete Movie"} onClose={handleClose}>
           <DeleteMovie id={currentMovie.id} onDelete={onMovieDelete} />
         </Dialog>
-      )}
+      )} */}
       <br />
       <div className={styles.genreBar}>
         <GenreSelect

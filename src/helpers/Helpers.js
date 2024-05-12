@@ -6,41 +6,26 @@ export const joinItems = (list) => {
   }
 };
 
-export const findObjectById = async (arr, id) => {
-  const data = await arr.find((x) => x.id === id);
-  return data;
-};
-
-export const sortByProperty = (arr, prop) => {
-  return arr.sort((a, b) => {
-    const propA = a[prop];
-    const propB = b[prop];
-    if (propA < propB) {
-      return -1;
-    }
-    if (propA > propB) {
-      return 1;
-    }
-    return 0;
-  });
-};
-
-export const fetchMovies = async (sortBy = 'release_date', genre = 'All', query = '') => {
+export const fetchMovies = async (
+  sortBy = "release_date",
+  genre = "All",
+  query = ""
+) => {
   const params = new URLSearchParams();
 
   if (sortBy) {
-    params.append('sortBy', sortBy);
-    params.append('sortOrder', 'asc');
+    params.append("sortBy", sortBy);
+    params.append("sortOrder", "asc");
   }
-  if (genre && genre !== 'All') {
-    params.append('filter', genre);
+  if (genre && genre !== "All") {
+    params.append("filter", genre);
   }
   if (query) {
-    params.append('search', query);
-    params.append('searchBy', 'title');
+    params.append("search", query);
+    params.append("searchBy", "title");
   }
   const reqUrl = `http://localhost:4000/movies?${params}`;
-  
+
   try {
     const res = await fetch(reqUrl);
     const json = await res.json();
@@ -52,11 +37,9 @@ export const fetchMovies = async (sortBy = 'release_date', genre = 'All', query 
 
 export const fetchMovie = async (movieId) => {
   const reqUrl = `http://localhost:4000/movies/${movieId}`;
-  console.log(reqUrl)
   try {
     const res = await fetch(reqUrl);
     const json = await res.json();
-    console.log('data is ', json)
     return json || {};
   } catch (err) {
     console.log(err);
@@ -71,4 +54,85 @@ export const convertTimeToReadableString = (num) => {
   var hours = Math.floor(num / 60);
   var minutes = num % 60;
   return `${hours}h ${minutes}min`;
+};
+
+export const isValidURL = (data) => {
+  try {
+    new URL(data);
+    return true;
+  } catch (_) {
+    return "Please enter a valid url";
+  }
+};
+
+export const postMovieData = async (data) => {
+  const reqUrl = `http://localhost:4000/movies`;
+  try {
+    const response = await fetch(reqUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log(result);
+      return result;
+    } else {
+      console.error("Response Error:", response);
+      return { error: response.status };
+    }
+  } catch (error) {
+    console.error("Fetch Error:", error);
+    return { error: error.message };
+  }
+};
+
+export const editMovieData = async (data) => {
+  const reqUrl = `http://localhost:4000/movies`;
+  try {
+    const response = await fetch(reqUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log(result);
+      return result;
+    } else {
+      console.error("Response Error:", response);
+      return { error: response.status };
+    }
+  } catch (error) {
+    console.error("Fetch Error:", error);
+    return { error: error.message };
+  }
+};
+
+export const deleteMovieData = async (id) => {
+  const reqUrl = `http://localhost:4000/movies/${id}`;
+  try {
+    const response = await fetch(reqUrl, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      return "Deleted!";
+    } else {
+      console.error("Response Error:", response);
+      return { error: response.status };
+    }
+  } catch (error) {
+    console.error("Fetch Error:", error);
+    return { error: error.message };
+  }
 };
