@@ -1,30 +1,48 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import React from "react";
+import { render, fireEvent, screen } from "@testing-library/react";
+import { useOutletContext } from "react-router-dom";
 import SearchForm from "./SearchForm";
-import "@testing-library/jest-dom";
 
-test("Renders input with initial value passed in props", () => {
-  render(<SearchForm initValue="Avengers" />);
-  expect(screen.getByTestId("searchInput")).toHaveValue("Avengers");
-});
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useOutletContext: jest.fn(),
+}));
 
-test('After typing to the input and a "click" event on the Submit button, the "onChange" prop is called with proper value', async () => {
-  const handleSearch = jest.fn();
-  const expectedValue = "Avengers The Mighty Warriors";
-  render(<SearchForm initValue="Avengers" onSearch={handleSearch} />);
-  await fireEvent.change(screen.getByTestId("searchInput"), {
-    target: { value: expectedValue },
+describe("<SearchForm />", () => {
+  let searchQuery;
+  let handleSearch;
+
+  beforeEach(() => {
+    searchQuery = "";
+    handleSearch = jest.fn();
+
+    useOutletContext.mockImplementation(() => [searchQuery, handleSearch]);
   });
-  await fireEvent.click(screen.getByTestId("searchBtn"));
-  expect(handleSearch).toHaveBeenCalledWith(expectedValue);
-});
 
-test('After typing to the input and an "enter" event, the "onChange" prop is called with proper value', async () => {
-  const handleSearch = jest.fn();
-  const expectedValue = "Avengers The Mighty Warriors";
-  render(<SearchForm initValue="Avengers" onSearch={handleSearch} />);
-  await fireEvent.change(screen.getByTestId("searchInput"), {
-    target: { value: expectedValue },
+  test("renders correctly", () => {
+    render(<SearchForm />);
+    expect(screen.getByTestId("searchInput").value).toBe(searchQuery);
   });
-  await fireEvent.keyDown(screen.getByTestId("searchInput"), { key: "Enter" });
-  expect(handleSearch).toHaveBeenCalledWith(expectedValue);
+
+  test("calls handleSearch when enter key is pressed", () => {
+    render(<SearchForm />);
+    const searchInput = screen.getByTestId("searchInput");
+
+    fireEvent.keyDown(searchInput, {
+      key: "Enter",
+      target: { value: "New Search Query" },
+    });
+    expect(handleSearch).toHaveBeenCalledWith("New Search Query");
+  });
+
+  test("calls handleSearch when search button is clicked", () => {
+    render(<SearchForm />);
+    const searchBtn = screen.getByTestId("searchBtn");
+    const searchInput = screen.getByTestId("searchInput");
+
+    fireEvent.change(searchInput, { target: { value: "New Search Query" } });
+    fireEvent.click(searchBtn);
+
+    expect(handleSearch).toHaveBeenCalledWith("New Search Query");
+  });
 });

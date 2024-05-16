@@ -31,17 +31,17 @@ export default function MovieTile(props) {
   }
 
   return (
-    <div className={styles.card} key={id} data-testid={id}>
+    <div className={styles.card} key={id} data-testid={id} htmlFor={title}>
       <img src={poster_path} data-testid={`${id}-img`} alt={title} onClick={handleCardClick} onError={handleError}/>
       <div className={styles.contextMenu}>
         <ContextMenu onEdit={handleEdit} onDelete={handleDelete} id={id} />
       </div>
       <div className={styles.descBlock}>
         <div className={styles.detailsBlock}>
-          <h3 className={styles.title}>{title}</h3>
-          <h3 className={styles.year}>{new Date(release_date).getFullYear()}</h3>
+          <h3 className={styles.title} data-testid="title">{title}</h3>
+          <h3 className={styles.year} data-testid="year">{new Date(release_date).getFullYear()}</h3>
         </div>
-        <p className={styles.genre}>{joinItems(genres)}</p>
+        <p className={styles.genre} data-testid="genres">{joinItems(genres)}</p>
       </div>
     </div>
   );

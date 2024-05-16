@@ -1,17 +1,18 @@
+import React from 'react';
+import { MemoryRouter } from 'react-router';
 import SearchForm from '../components/SearchForm/SearchForm';
-import { fn } from '@storybook/test';
 
 export default {
-    title: 'SearchForm',
-    component: SearchForm,
-    tags: ['autodocs']
+  component: SearchForm,
+  title: 'SearchForm',
+  tags: ['autodocs'],
+  decorators: [(Story) => <MemoryRouter><Story/></MemoryRouter>]
 };
 
-const Template = args => <SearchForm {...args} />;
+const Template = (args) => <SearchForm {...args} />;
 
 export const Default = Template.bind({});
-
 Default.args = {
-    initValue: 'Avengers',
-    onSearch: fn()
-}
+  searchQuery: '',
+  handleSearch: (query) => { console.log(`Searching for ${query}`) },
+};

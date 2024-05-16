@@ -11,7 +11,7 @@ export default function DeleteMovie({ id, onDelete }) {
     <>
       <p>Are you sure you want to delete this movie?</p>
       <div className={styles.btnGroup}>
-        <button className={styles.primaryBtn} onClick={handleDelete}>
+        <button className={styles.primaryBtn} onClick={handleDelete} data-testid="confirmBtn">
           Confirm
         </button>
       </div>

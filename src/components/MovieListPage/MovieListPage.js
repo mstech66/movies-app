@@ -1,144 +1,141 @@
 import React, { useEffect, useState } from "react";
 import styles from "./MovieListPage.module.css";
-import { findObjectById } from "../../helpers/Helpers";
+import { fetchMovies, useLoaderData } from "../../helpers/Helpers";
 import MovieTile from "../MovieTile/MovieTile";
-import SearchForm from "../SearchForm/SearchForm";
-import MovieDetails from "../MovieDetails/MovieDetails";
-import Dialog from "../Dialog/Dialog";
-import MovieForm from "../MovieForm/MovieForm";
-import DeleteMovie from "../DeleteMovie/DeleteMovie";
 import SortControl from "../SortControl/SortControl";
 import GenreSelect from "../GenreSelect/GenreSelect";
-import {FaSearch} from 'react-icons/fa';
+import { FaSearch } from "react-icons/fa";
+import {
+  Outlet,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
-const genreList = ['All', 'Documentary', 'Comedy', 'Horror', 'Crime'];
+const genreList = ["All", "Documentary", "Comedy", "Horror", "Crime"];
 
-export default function MovieListPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [movieDetail, setMovieDetail] = useState(null);
-  const [sortBy, setSortBy] = useState("release_date");
-  const [activeGenre, setActiveGenre] = useState("All");
-  const [movies, setMovies] = useState([]);
-  const [currentMovie, setCurrentMovie] = useState(null);
-  const [currentDialog, setCurrentDialog] = useState(null);
+export default function MovieListPage({initialMovies}) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("query") || ""
+  );
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [sortBy, setSortBy] = useState(
+    searchParams.get("sortBy") || "release_date"
+  );
+  const [activeGenre, setActiveGenre] = useState(
+    searchParams.get("genre") || "All"
+  );
+  const { movies: data } = useLoaderData();
+  const [movies, setMovies] = useState(initialMovies || data?.movies || []);
+  const navigate = useNavigate();
+  const { movieId } = useParams();
 
   function handleSearch(value) {
-    console.log("Searching for", value);
+    let params = new URLSearchParams(searchParams.toString());
+    value ? params.set("query", value) : params.delete("query");
+    setSearchParams(params);
     setSearchQuery(value);
+    navigate(`?${params.toString()}`);
   }
 
-  const handleMovieCardClick = async (value) => {
-    await findObjectById(movies, value).then((res) => {
-      setMovieDetail(res);
-    });
+  function handleAdd(){
+    navigate(`/new`);
+  }
+
+  const handleMovieCardClick = async (id) => {
+    setSelectedMovie(id);
+    navigate(`/${id}`);
+  };
+
+  const handleClear = () => {
+    setActiveGenre("All")
+    setSortBy("release_date")
+    setSearchQuery("")
+    navigate(`/`);
   };
 
   const handleSort = (value) => {
+    let params = new URLSearchParams(searchParams.toString());
+    value ? params.set("sortBy", value) : params.delete("sortBy");
+    setSearchParams(params);
     setSortBy(value);
+    navigate(`?${params.toString()}`);
   };
 
   const handleSelect = (value) => {
+    let params = new URLSearchParams(searchParams.toString());
+    value ? params.set("genre", value) : params.delete("genre");
+    setSearchParams(params);
     setActiveGenre(value);
-  }
-
-  const handleClose = () => {
-    setCurrentDialog(null);
+    navigate(`?${params.toString()}`);
   };
-
-  const handleSubmit = (value) => {
-    setCurrentDialog(null);
-    console.log("Adding movie", value);
-  };
-
-  const handleEdit = async (id) => {
-    await findObjectById(movies, id).then((res) => {
-      setCurrentMovie(res);
-      setCurrentDialog("edit");
-    });
-    console.log("Editing for", currentMovie);
-  };
-
-  const handleDelete = async (id) => {
-    await findObjectById(movies, id).then((res) => {
-      setCurrentMovie(res);
-      setCurrentDialog("delete");
-    });
-    console.log("Deleting for", currentMovie);
-  };
-
-  const onMovieDelete = async(id) => {
-    console.log('Deleting finally for', id);
-    //todo: delete logic
-    setCurrentDialog(null);
-  }
 
   useEffect(() => {
-    const params = new URLSearchParams();
-    if (searchQuery !== "") {
-        params.append('search', searchQuery);
-        params.append('searchBy', 'title');
-    }
+    const fetchNewMovies = async () => {
+      const fetchedMovies = await fetchMovies(sortBy, activeGenre, searchQuery);
+      setMovies(fetchedMovies);
+    };
 
-    if (sortBy !== "") {
-        params.append('sortBy', sortBy);
-        params.append('sortOrder', 'asc');
-    }
-    if (activeGenre !== "All") {
-        params.append('filter', activeGenre);
-    }
-    const reqUrl = `http://localhost:4000/movies?${params.toString()}`;
-    fetch(reqUrl)
-      .then((res) => res.json())
-      .then((json) => {
-        setMovies(json.data || []);
-      })
-      .catch((err) => console.log(err));
+    fetchNewMovies();
   }, [sortBy, searchQuery, activeGenre]);
+
+  useEffect(() => {
+    if (movieId) {
+      setSelectedMovie(movieId);
+    }
+  }, [movieId]);
+
+  const handleEdit = (id) => {
+    navigate(`/${id}/edit`);
+  }
+
+  const handleDelete = (id) => {
+    navigate(`/${id}/delete`);
+  }
 
   return (
     <>
       <div className={styles.navBar}>
-        <button className={styles.appNameTitle} onClick={()=>{
-            setMovieDetail(null);
-          }}><h2>netflixroulette</h2></button>
-        {movieDetail != null ? (
-          <button className={styles.searchBtn}><FaSearch onClick={()=>{
-            setMovieDetail(null);
-          }}/></button>
+        <button
+          id="appNameTitle"
+          className={styles.appNameTitle}
+          onClick={() => {
+            setSelectedMovie(null);
+            handleClear();
+          }}
+        >
+          <h2>netflixroulette</h2>
+        </button>
+        {selectedMovie != null ? (
+          <button className={styles.searchBtn}>
+            <FaSearch
+              onClick={() => {
+                setSelectedMovie(null);
+                navigate(`/`);
+              }}
+            />
+          </button>
         ) : (
           <button
+            id="addBtn"
             className={styles.addBtn}
             onClick={() => {
-              setCurrentDialog("add");
+              handleAdd();
             }}
           >
             + ADD MOVIE
           </button>
         )}
       </div>
-      {movieDetail === null ? (
-        <SearchForm initValue={`${searchQuery}`} onSearch={handleSearch} />
-      ) : (
-        <MovieDetails {...movieDetail} />
-      )}
-      {currentDialog === "add" && (
-        <Dialog title={"Add Movie"} onClose={handleClose}>
-          <MovieForm onSubmit={handleSubmit} />
-        </Dialog>
-      )}
-      {currentDialog === "edit" && (
-        <Dialog title={"Edit Movie"} onClose={handleClose}>
-          <MovieForm movie={currentMovie} onSubmit={handleSubmit} />
-        </Dialog>
-      )}
-      {currentDialog === "delete" && (
-        <Dialog title={"Delete Movie"} onClose={handleClose}>
-          <DeleteMovie id={currentMovie.id} onDelete={onMovieDelete} />
-        </Dialog>
-      )}
+      <Outlet context={[searchQuery, handleSearch]}/>
       <br />
       <div className={styles.genreBar}>
-        <GenreSelect genreList={genreList} activeGenre={activeGenre} onSelect={handleSelect}/>
+        <GenreSelect
+          genreList={genreList}
+          activeGenre={activeGenre}
+          onSelect={handleSelect}
+        />
         <SortControl defaultValue={sortBy} handleChange={handleSort} />
       </div>
       <div className={styles.movieFlex}>
@@ -147,9 +144,9 @@ export default function MovieListPage() {
             <MovieTile
               {...movie}
               key={movie.id}
-              onEdit={async () => await handleEdit(movie.id)}
-              onDelete={async () => await handleDelete(movie.id)}
-              handleClick={async () => await handleMovieCardClick(movie.id)}
+              onEdit={() => handleEdit(movie.id)}
+              onDelete={() => handleDelete(movie.id)}
+              handleClick={() => handleMovieCardClick(movie.id)}
             />
           );
         })}

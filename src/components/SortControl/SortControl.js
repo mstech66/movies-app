@@ -7,7 +7,7 @@ export default function SortControl(props) {
     <div className={styles.customSelect}>
       <label className={styles.sortLabel}>Sort By </label>
       <select
-        defaultValue={props.defaultValue}
+        value={props.defaultValue}
         className={styles.sortSelect}
         onChange={(event) => {
           props.handleChange(event.target.value);
