@@ -3,7 +3,6 @@ import styles from "./SortControl.module.css";
 import PropTypes from "prop-types";
 
 export default function SortControl(props) {
-
   return (
     <div className={styles.customSelect}>
       <label className={styles.sortLabel}>Sort By </label>
