@@ -128,27 +128,7 @@ export default function MovieListPage() {
           </button>
         )}
       </div>
-      {/* {selectedMovie === null ? (
-        <SearchForm initValue={`${searchQuery}`} onSearch={handleSearch} />
-      ) : (
-        <MovieDetails />
-      )} */}
       <Outlet context={[searchQuery, handleSearch]}/>
-      {/* {currentDialog === "add" && (
-        <Dialog title={"Add Movie"} onClose={handleClose}>
-          <MovieForm onSubmit={handleSubmit} />
-        </Dialog>
-      )}
-      {currentDialog === "edit" && (
-        <Dialog title={"Edit Movie"} onClose={handleClose}>
-          <MovieForm movie={currentMovie} onSubmit={handleSubmit} />
-        </Dialog>
-      )}
-      {currentDialog === "delete" && (
-        <Dialog title={"Delete Movie"} onClose={handleClose}>
-          <DeleteMovie id={currentMovie.id} onDelete={onMovieDelete} />
-        </Dialog>
-      )} */}
       <br />
       <div className={styles.genreBar}>
         <GenreSelect

@@ -14,8 +14,8 @@ export default function Dialog({ title, children, onClose }) {
       <div className={styles.modalContainer}>
         <button style={{position: "absolute", opacity: 0}} tabIndex={-1}></button>
         <div className={styles.modalContent}>
-          <h1 className={styles.modalTitle}>{title.toUpperCase()}</h1>
-          <button className={styles.closeBtn} onClick={handleClose}>
+          <h1 className={styles.modalTitle} data-testid="modalTitle">{title.toUpperCase()}</h1>
+          <button className={styles.closeBtn} onClick={handleClose} data-testid='closeBtn'>
             &times;
           </button>
           {children}

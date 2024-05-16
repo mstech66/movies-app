@@ -12,7 +12,6 @@ export default function AddMovieForm() {
   };
 
   const handleSubmit = async (value) => {
-    console.log("Adding movie", value);
     await postMovieData(value);
     navigate('/');
   };

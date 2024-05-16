@@ -35,10 +35,10 @@ export function ContextMenu({ id, onEdit, onDelete }) {
           <button onClick={closeAction} className={styles.crossButton}>
             &times;
           </button>
-          <button onClick={editAction} className={styles.contextMenuItem}>
+          <button onClick={editAction} className={styles.contextMenuItem} data-testid="edit">
             Edit
           </button>
-          <button onClick={deleteAction} className={styles.contextMenuItem}>
+          <button onClick={deleteAction} className={styles.contextMenuItem} data-testid="delete">
             Delete
           </button>
         </div>

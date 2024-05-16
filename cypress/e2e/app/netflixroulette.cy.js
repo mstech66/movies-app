@@ -1,7 +1,7 @@
 import React from "react";
 
 <reference types="cypress" />;
-describe("Counter App", () => {
+describe("netflixroulette App", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000");
   });
@@ -65,6 +65,33 @@ describe("Counter App", () => {
     });
     expect(isSorted(movieTitles)).to.be.true;
     cy.get("[data-testid='sortSelect']").select("release_date");
+  });
+
+  it("adding a new movie and searching that it exists", () => {
+    cy.get("#addBtn").click();
+    cy.get("input[data-testid='title']").type('Hello Brother');
+    cy.get("[data-testid='releaseDate']").type('1999-12-12');
+    cy.get("[data-testid='imgUrl']").type('https://m.media-amazon.com/images/M/MV5BMjk1MDczMGQtY2RkNS00OGVhLWJhNzYtNWMwMzFhNTcyNjczXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_.jpg');
+    cy.get("[data-testid='rating']").type('9.1');
+    cy.get("[data-testid='genreSelect']").click();
+    cy.get("[data-testid='Comedy']").click();
+    cy.get("[data-testid='duration']").type('120');
+    cy.get("[data-testid='description']").type('Hello Brother Movie from 1999');
+    cy.get("[data-testid='submitBtn']").click();
+
+    cy.wait(2000);
+
+    cy.get("[data-testid='searchInput']").type('Hello Brother');
+    cy.get("[data-testid='searchBtn']").click();
+
+    cy.get("div[for='Hello Brother'] h3[data-testid='title']").contains("Hello Brother");
+    cy.get("div[for='Hello Brother'] h3[data-testid='year']").contains("1999");
+    cy.get("div[for='Hello Brother'] p[data-testid='genres']").contains("Comedy");
+
+    cy.get("div[for='Hello Brother'] button").click();
+    cy.get("button[data-testid='delete']").click(); //deleting the created movie
+    cy.wait(2000);
+    cy.get("[data-testid='confirmBtn']").click();
   });
 });
 

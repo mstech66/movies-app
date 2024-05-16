@@ -13,9 +13,12 @@ export default function DeleteMovieForm() {
   };
 
   const handleDelete = async (id) => {
-    console.log("Deleting movie", id);
     await deleteMovieData(id);
-    window.location = '/';
+    if (process.env.NODE_ENV !== 'test') {
+      window.location.href = '/';
+    } else {
+      navigate('/');
+    }
   };
 
   return (

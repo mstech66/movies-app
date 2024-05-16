@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./MovieForm.module.css";
 import { genreList as allGenres } from "../../data/MoviesList";
-import { getRandomId, isValidURL, joinItems } from "../../helpers/Helpers";
+import { isValidURL, joinItems } from "../../helpers/Helpers";
 import PropTypes from "prop-types";
 import { Controller, useForm } from "react-hook-form";
 
@@ -58,9 +58,13 @@ export default function MovieForm({ movie, onSubmit }) {
   };
 
   const handleFormSubmit = (data) => {
-    data.vote_average = Number(data.vote_average);
-    data.runtime = Number(data.runtime);
-    onSubmit(data);
+    try {
+      data.vote_average = Number(data.vote_average);
+      data.runtime = Number(data.runtime);
+      onSubmit(data);
+    } catch (error) {
+      console.log("handleFormSubmit:", error);
+    }
   };
 
   const handleClickOutside = (event) => {
@@ -82,6 +86,7 @@ export default function MovieForm({ movie, onSubmit }) {
     <form
       ref={formRef}
       className={styles.movieForm}
+      data-testid="movieForm"
       onSubmit={handleSubmit(handleFormSubmit)}
     >
       <div className={styles.inlineContainer}>

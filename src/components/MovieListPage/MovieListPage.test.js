@@ -32,18 +32,6 @@ test("renders without crashing", async () => {
   );
 });
 
-test("searches correctly", () => {
-  render(
-    <MemoryRouter>
-      <MovieListPage />
-    </MemoryRouter>
-  );
-  fireEvent.change(screen.getByRole("textbox"), {
-    target: { value: "Test Search" },
-  });
-  expect(screen.getByDisplayValue(/Test Search/i)).toBeTruthy();
-});
-
 test("changes genre correctly", async () => {
   render(
     <MemoryRouter>

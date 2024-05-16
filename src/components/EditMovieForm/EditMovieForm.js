@@ -24,9 +24,12 @@ export default function EditMovieForm() {
   };
 
   const handleSubmit = async (value) => {
-    console.log("Editing movie", value);
     await editMovieData(value);
-    window.location = '/';
+    if (process.env.NODE_ENV !== 'test') {
+      window.location.href = '/';
+    } else {
+      navigate('/');
+    }
   };
 
   if (loading) {
