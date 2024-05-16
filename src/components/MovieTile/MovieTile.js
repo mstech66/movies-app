@@ -31,7 +31,7 @@ export default function MovieTile(props) {
   }
 
   return (
-    <div className={styles.card} key={id} data-testid={id} for={title}>
+    <div className={styles.card} key={id} data-testid={id} htmlFor={title}>
       <img src={poster_path} data-testid={`${id}-img`} alt={title} onClick={handleCardClick} onError={handleError}/>
       <div className={styles.contextMenu}>
         <ContextMenu onEdit={handleEdit} onDelete={handleDelete} id={id} />

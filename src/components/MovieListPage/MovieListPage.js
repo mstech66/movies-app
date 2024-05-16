@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "./MovieListPage.module.css";
-import { fetchMovies } from "../../helpers/Helpers";
+import { fetchMovies, useLoaderData } from "../../helpers/Helpers";
 import MovieTile from "../MovieTile/MovieTile";
 import SortControl from "../SortControl/SortControl";
 import GenreSelect from "../GenreSelect/GenreSelect";
 import { FaSearch } from "react-icons/fa";
 import {
   Outlet,
-  useLoaderData,
   useNavigate,
   useParams,
   useSearchParams,
@@ -15,7 +14,7 @@ import {
 
 const genreList = ["All", "Documentary", "Comedy", "Horror", "Crime"];
 
-export default function MovieListPage() {
+export default function MovieListPage({initialMovies}) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("query") || ""
@@ -27,8 +26,8 @@ export default function MovieListPage() {
   const [activeGenre, setActiveGenre] = useState(
     searchParams.get("genre") || "All"
   );
-  const { movies: initialMovies } = useLoaderData();
-  const [movies, setMovies] = useState(initialMovies);
+  const { movies: data } = useLoaderData();
+  const [movies, setMovies] = useState(initialMovies || data?.movies || []);
   const navigate = useNavigate();
   const { movieId } = useParams();
 
@@ -113,6 +112,7 @@ export default function MovieListPage() {
             <FaSearch
               onClick={() => {
                 setSelectedMovie(null);
+                navigate(`/`);
               }}
             />
           </button>

@@ -3,22 +3,27 @@ import PropTypes from "prop-types";
 import styles from "./MovieDetails.module.css";
 import { convertTimeToReadableString, fetchMovie, joinItems } from "../../helpers/Helpers";
 import { useParams } from "react-router-dom";
-import { act } from "react-dom/test-utils";
 
-export default function MovieDetails() {
-  const [data, setData] = useState(null);
+export default function MovieDetails({ initialMovie }) {
+  const [movie, setMovie] = useState(initialMovie);
   const { movieId } = useParams();
 
   useEffect(() => {
     async function fetchDetails() {
-      const fetchedMovie = await fetchMovie(movieId);
-  
-      act(() => setTimeout(() => setData(fetchedMovie), 0));
+      if (!movie) {
+        try {
+          const fetchedMovie = await fetchMovie(movieId);
+          setMovie(fetchedMovie);
+        } catch (err) {
+          console.error(err);
+        }
+      }
     }
-    fetchDetails();
-  }, [movieId]);
 
-  if(!data){
+    fetchDetails();
+  }, [movie, movieId]);
+
+  if (!movie) {
     return <div>Loading...</div>
   }
 
@@ -31,7 +36,7 @@ export default function MovieDetails() {
     overview,
     runtime,
     poster_path
-  } = data;
+  } = movie;
 
   const handleError = (event) => {
     event.target.onerror = null;
@@ -60,13 +65,14 @@ export default function MovieDetails() {
 }
 
 MovieDetails.propTypes = {
-  id: PropTypes.number,
-  title: PropTypes.string,
-  poster_path: PropTypes.string,
-  runtime: PropTypes.number,
-  genres: PropTypes.array,
-  overview: PropTypes.string,
-  vote_average: PropTypes.number,
-  release_date: PropTypes.string,
-  handleChange: PropTypes.func,
+  initialMovie: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    poster_path: PropTypes.string,
+    runtime: PropTypes.number,
+    genres: PropTypes.array,
+    overview: PropTypes.string,
+    vote_average: PropTypes.number,
+    release_date: PropTypes.string,
+  }),
 };

@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import MovieDetails from './MovieDetails';
 import '@testing-library/jest-dom'
-import { convertTimeToReadableString, joinItems } from '../../helpers/Helpers';
+import { convertTimeToReadableString, fetchMovie, joinItems } from '../../helpers/Helpers';
 import { MemoryRouter } from 'react-router-dom';
 
 jest.mock('react-router-dom', () => ({
@@ -11,7 +11,11 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('../../helpers/Helpers', () => ({
   ...jest.requireActual('../../helpers/Helpers'),
-  fetchMovie: () => Promise.resolve({
+  fetchMovie: jest.fn(),
+}));
+
+test('Renders the component correctly with the data', async () => {
+  fetchMovie.mockResolvedValue({
     "id": 337167,
     "title": "Test Movie",
     "tagline": "Don't miss the climax",
@@ -27,12 +31,11 @@ jest.mock('../../helpers/Helpers', () => ({
         "Comedy"
     ],
     "runtime": 106
-  })
-}));
-
-test('Renders the component correctly with the data', async () => {
+  });
   render(<MemoryRouter><MovieDetails/></MemoryRouter>);
-  expect(screen.getByText(/Loading/i)).toBeInTheDocument();
+  const loading = screen.getByText(/Loading/i);
+  expect(loading).toBeInTheDocument();
+  await waitFor(() => screen.findByText("Test Movie"));
   expect(await screen.findByText("Test Movie")).toBeInTheDocument();
   expect(screen.getByText(new Date("2018-02-07").getFullYear())).toBeInTheDocument();
   expect(screen.getByText(joinItems([

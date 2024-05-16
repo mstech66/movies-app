@@ -5,7 +5,7 @@ import { Outlet, useOutletContext } from "react-router-dom";
 
 
 export default function SearchForm(props){
-  const [searchQuery, handleSearch] = useOutletContext();
+  const [searchQuery = "", handleSearch = () => {}] = useOutletContext() || [];
   const [inputValue, setInputValue] = useState(searchQuery);
 
   return (

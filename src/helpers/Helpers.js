@@ -1,3 +1,6 @@
+import { movieList } from "../data/MoviesList";
+import { useLoaderData as originalLoaderData } from "react-router-dom";
+
 export const joinItems = (list) => {
   if (list.length === 2) {
     return list.join(" & ");
@@ -135,4 +138,11 @@ export const deleteMovieData = async (id) => {
     console.error("Fetch Error:", error);
     return { error: error.message };
   }
+};
+
+export const useLoaderData = () => {
+  if (process.env.NODE_ENV === 'test' || process.env.STORYBOOK) {
+    return { movies: movieList };
+  }
+  return originalLoaderData();
 };
