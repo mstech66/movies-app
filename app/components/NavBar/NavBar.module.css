@@ -1,0 +1,38 @@
+.navBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  color: #f65261;
+  margin: 0 52px;
+}
+
+.appNameTitle {
+  margin: 0;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  color: #f65261;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.addBtn {
+  background: #fff;
+  color: #f65261;
+  padding: 10px;
+  font-weight: bold;
+  border: 1px solid white;
+  border-radius: 4px;
+  backdrop-filter: blur(30px);
+  cursor: pointer;
+}
+
+.searchBtn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #f65261;
+  padding: 4px 0px;
+  cursor: pointer;
+}
