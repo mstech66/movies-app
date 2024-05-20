@@ -1,0 +1,11 @@
+.movieFlex {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.genreBar{
+  display: flex;
+  justify-content: space-between;
+  margin: 0 52px;
+}
